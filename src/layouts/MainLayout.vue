@@ -20,6 +20,17 @@
       show-if-above
       bordered
     >
+      <div class="row items-center no-wrap q-pa-md">
+        <q-avatar
+          color="primary"
+          text-color="white"
+          icon="sports_soccer"
+        />
+        <div class="q-ml-sm text-subtitle1 text-weight-medium">
+          SK Aaigem Jeugd
+        </div>
+      </div>
+
       <q-list>
         <q-item
           clickable
