@@ -45,6 +45,17 @@
           <q-item-section> Vandaag </q-item-section>
         </q-item>
       </q-list>
+      <q-item
+        clickable
+        to="/profiel"
+      >
+        <q-item-section avatar>
+          <q-icon name="person" />
+        </q-item-section>
+        <q-item-section>
+          Profiel
+        </q-item-section>
+      </q-item>
     </q-drawer>
 
     <q-page-container>
