@@ -11,7 +11,9 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> SK Aaigem Jeugd </q-toolbar-title>
+        <q-toolbar-title>
+          U10
+        </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
