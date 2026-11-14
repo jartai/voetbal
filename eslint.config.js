@@ -82,4 +82,32 @@ export default defineConfigWithVueTs(
   },
 
   prettierSkipFormatting,
+
+  {
+    files: ['**/*.vue'],
+    rules: {
+      'vue/max-attributes-per-line': [
+        'error',
+        {
+          singleline: { max: 1 },
+          multiline: { max: 1 },
+        },
+      ],
+      'vue/first-attribute-linebreak': [
+        'error',
+        {
+          singleline: 'beside',
+          multiline: 'below',
+        },
+      ],
+      'vue/html-closing-bracket-newline': [
+        'error',
+        {
+          singleline: 'never',
+          multiline: 'always',
+        },
+      ],
+      'vue/html-indent': ['error', 2],
+    },
+  },
 );
