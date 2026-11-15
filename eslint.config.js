@@ -6,18 +6,6 @@ import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescri
 import prettierSkipFormatting from '@vue/eslint-config-prettier/skip-formatting';
 
 export default defineConfigWithVueTs(
-  {
-    /**
-     * Ignore the following files.
-     * Please note that pluginQuasar.configs.recommended() already ignores
-     * the "node_modules" folder for you (and all other Quasar project
-     * relevant folders and files).
-     *
-     * ESLint requires "ignores" key to be the only one in this object
-     */
-    // ignores: []
-  },
-
   pluginQuasar.configs.recommended(),
   js.configs.recommended,
 
@@ -37,12 +25,10 @@ export default defineConfigWithVueTs(
 
   {
     files: ['**/*.ts', '**/*.vue'],
-    rules: {
-      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
-    },
+    rules: { '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }] },
   },
   // https://github.com/vuejs/eslint-config-typescript
-  vueTsConfigs.recommendedTypeChecked,
+  vueTsConfigs.recommended,
 
   {
     languageOptions: {
@@ -74,11 +60,7 @@ export default defineConfigWithVueTs(
 
   {
     files: ['src-pwa/sw/**/*.ts'],
-    languageOptions: {
-      globals: {
-        ...globals.serviceworker,
-      },
-    },
+    languageOptions: { globals: { ...globals.serviceworker } },
   },
 
   prettierSkipFormatting,
@@ -108,6 +90,41 @@ export default defineConfigWithVueTs(
         },
       ],
       'vue/html-indent': ['error', 2],
+      'vue/script-indent': [
+        'error',
+        2,
+        {
+          baseIndent: 0,
+          switchCase: 1,
+        },
+      ],
+    },
+  },
+
+  {
+    files: ['**/*.{vue,ts,js}'],
+    rules: {
+      'eol-last': ['error', 'always'],
+      'no-multiple-empty-lines': [
+        'error',
+        {
+          max: 1,
+          maxEOF: 0,
+        },
+      ],
+      'object-curly-newline': [
+        'error',
+        {
+          ObjectExpression: {
+            multiline: true,
+            minProperties: 2,
+          },
+          ObjectPattern: {
+            multiline: true,
+            minProperties: 2,
+          },
+        },
+      ],
     },
   },
 );
