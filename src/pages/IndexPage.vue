@@ -17,13 +17,28 @@
           Volgende wedstrijd
         </div>
         <div class="text-h6">
-          Nog geen wedstrijd
+          {{ opponent.trim() ? opponent : 'Nog geen wedstrijd' }}
         </div>
+
+        <q-input
+          v-model="opponent"
+          class="q-mt-md"
+          label="Tegenstander"
+          outlined
+        />
       </q-card-section>
     </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
-//
+import { LocalStorage } from 'quasar';
+import { ref, watch } from 'vue';
+
+const stored = LocalStorage.getItem('nextOpponent');
+const opponent = ref(typeof stored === 'string' ? stored : '');
+
+watch(opponent, (value) => {
+  LocalStorage.set('nextOpponent', value);
+});
 </script>
