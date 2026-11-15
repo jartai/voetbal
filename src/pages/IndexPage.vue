@@ -38,6 +38,17 @@
                 {{ item.type === 'wedstrijd' ? 'Wedstrijd' : 'Training' }}
               </q-item-label>
             </q-item-section>
+
+            <q-item-section side>
+              <q-btn
+                flat
+                round
+                dense
+                icon="delete"
+                aria-label="Verwijderen"
+                @click="removeItem(item.id)"
+              />
+            </q-item-section>
           </q-item>
         </q-list>
 
@@ -127,5 +138,9 @@ function addItem() {
   });
 
   title.value = '';
+}
+
+function removeItem(id: string) {
+  items.value = items.value.filter((item) => item.id !== id);
 }
 </script>
