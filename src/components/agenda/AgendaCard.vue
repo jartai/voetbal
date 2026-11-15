@@ -1,3 +1,77 @@
+<script setup lang="ts">
+import { LocalStorage } from 'quasar';
+import { ref, watch } from 'vue';
+
+type AgendaType = 'wedstrijd' | 'training';
+
+type AgendaItem = {
+  id: string;
+  type: AgendaType;
+  title: string;
+  date: string;
+};
+
+const kinds = [
+  {
+    label: 'Wedstrijd',
+    value: 'wedstrijd',
+  },
+  {
+    label: 'Training',
+    value: 'training',
+  },
+];
+
+function loadItems(): AgendaItem[] {
+  const stored = LocalStorage.getItem('agenda');
+  return Array.isArray(stored) ? (stored as AgendaItem[]) : [];
+}
+
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat('nl-BE', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(value));
+}
+
+const items = ref<AgendaItem[]>(loadItems());
+const kind = ref<AgendaType>('wedstrijd');
+const title = ref('');
+const when = ref('');
+
+watch(
+  items,
+  (value) => {
+    LocalStorage.set('agenda', value);
+  },
+  { deep: true },
+);
+
+function addItem() {
+  const label = title.value.trim();
+
+  if (label === '' || when.value === '') {
+    return;
+  }
+
+  items.value.push({
+    id: crypto.randomUUID(),
+    type: kind.value,
+    title: label,
+    date: when.value,
+  });
+
+  title.value = '';
+  when.value = '';
+}
+
+function removeItem(id: string) {
+  items.value = items.value.filter((item) => item.id !== id);
+}
+</script>
+
 <template>
   <q-card
     flat
@@ -83,77 +157,3 @@
     </q-card-section>
   </q-card>
 </template>
-
-<script setup lang="ts">
-import { LocalStorage } from 'quasar';
-import { ref, watch } from 'vue';
-
-type AgendaType = 'wedstrijd' | 'training';
-
-type AgendaItem = {
-  id: string;
-  type: AgendaType;
-  title: string;
-  date: string;
-};
-
-const kinds = [
-  {
-    label: 'Wedstrijd',
-    value: 'wedstrijd',
-  },
-  {
-    label: 'Training',
-    value: 'training',
-  },
-];
-
-function loadItems(): AgendaItem[] {
-  const stored = LocalStorage.getItem('agenda');
-  return Array.isArray(stored) ? (stored as AgendaItem[]) : [];
-}
-
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat('nl-BE', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(value));
-}
-
-const items = ref<AgendaItem[]>(loadItems());
-const kind = ref<AgendaType>('wedstrijd');
-const title = ref('');
-const when = ref('');
-
-watch(
-  items,
-  (value) => {
-    LocalStorage.set('agenda', value);
-  },
-  { deep: true },
-);
-
-function addItem() {
-  const label = title.value.trim();
-
-  if (label === '' || when.value === '') {
-    return;
-  }
-
-  items.value.push({
-    id: crypto.randomUUID(),
-    type: kind.value,
-    title: label,
-    date: when.value,
-  });
-
-  title.value = '';
-  when.value = '';
-}
-
-function removeItem(id: string) {
-  items.value = items.value.filter((item) => item.id !== id);
-}
-</script>

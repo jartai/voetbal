@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import AgendaCard from '@/components/agenda/AgendaCard.vue';
+</script>
+
 <template>
   <q-page padding>
     <div class="text-h5">
@@ -10,7 +14,3 @@
     <AgendaCard />
   </q-page>
 </template>
-
-<script setup lang="ts">
-import AgendaCard from '@/components/agenda/AgendaCard.vue';
-</script>

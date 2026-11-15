@@ -98,6 +98,7 @@ export default defineConfigWithVueTs(
           switchCase: 1,
         },
       ],
+      'vue/block-order': ['error', { order: ['script', 'template', 'style'] }],
     },
   },
 

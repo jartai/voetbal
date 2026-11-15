@@ -1,3 +1,7 @@
+<script setup lang="ts">
+//
+</script>
+
 <template>
   <q-page padding>
     <div class="text-h5">
@@ -26,7 +30,3 @@
     </q-card>
   </q-page>
 </template>
-
-<script setup lang="ts">
-//
-</script>
