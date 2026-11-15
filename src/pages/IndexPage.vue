@@ -107,8 +107,12 @@ type AgendaItem = {
 };
 
 const kinds = [
-  { label: 'Wedstrijd', value: 'wedstrijd' },
-  { label: 'Training', value: 'training' },
+  {
+    label: 'Wedstrijd', value: 'wedstrijd'
+  },
+  {
+    label: 'Training', value: 'training'
+  },
 ];
 
 function loadItems(): AgendaItem[] {
@@ -121,6 +125,7 @@ function formatDate(value: string) {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
+    year: 'numeric',
   }).format(new Date(value));
 }
 
@@ -134,7 +139,7 @@ watch(
   (value) => {
     LocalStorage.set('agenda', value);
   },
-  { deep: true },
+  {deep: true},
 );
 
 function addItem() {
