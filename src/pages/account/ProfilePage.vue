@@ -19,8 +19,8 @@
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>Jouw naam</q-item-label>
-          <q-item-label caption>Délégué</q-item-label>
+          <q-item-label>Jürgen Landrie</q-item-label>
+          <q-item-label caption>Delegee</q-item-label>
         </q-item-section>
       </q-item>
     </q-card>
