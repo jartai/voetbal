@@ -14,17 +14,57 @@
     >
       <q-card-section>
         <div class="text-overline">
-          Volgende wedstrijd
-        </div>
-        <div class="text-h6">
-          {{ opponent.trim() ? opponent : 'Nog geen wedstrijd' }}
+          Gepland
         </div>
 
-        <q-input
-          v-model="opponent"
+        <div
+          v-if="items.length === 0"
+          class="text-h6"
+        >
+          Nog niets gepland
+        </div>
+
+        <q-list
+          v-else
+          separator
+        >
+          <q-item
+            v-for="item in items"
+            :key="item.id"
+          >
+            <q-item-section>
+              <q-item-label>{{ item.title }}</q-item-label>
+              <q-item-label caption>
+                {{ item.type === 'wedstrijd' ? 'Wedstrijd' : 'Training' }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+
+        <q-select
+          v-model="kind"
           class="q-mt-md"
-          label="Tegenstander"
+          label="Soort"
           outlined
+          emit-value
+          map-options
+          :options="kinds"
+        />
+
+        <q-input
+          v-model="title"
+          class="q-mt-md"
+          label="Naam"
+          outlined
+          @keyup.enter="addItem"
+        />
+
+        <q-btn
+          class="q-mt-md"
+          color="primary"
+          label="Toevoegen"
+          :disable="title.trim() === ''"
+          @click="addItem"
         />
       </q-card-section>
     </q-card>
@@ -35,10 +75,57 @@
 import { LocalStorage } from 'quasar';
 import { ref, watch } from 'vue';
 
-const stored = LocalStorage.getItem('nextOpponent');
-const opponent = ref(typeof stored === 'string' ? stored : '');
+type AgendaType = 'wedstrijd' | 'training';
 
-watch(opponent, (value) => {
-  LocalStorage.set('nextOpponent', value);
-});
+type AgendaItem = {
+  id: string;
+  type: AgendaType;
+  title: string;
+};
+
+const kinds = [
+  {
+    label: 'Wedstrijd',
+    value: 'wedstrijd'
+  },
+  {
+    label: 'Training',
+    value: 'training'
+  },
+];
+
+function loadItems(): AgendaItem[] {
+  const stored = LocalStorage.getItem('agenda');
+  return Array.isArray(stored) ? (stored as AgendaItem[]) : [];
+}
+
+const items = ref<AgendaItem[]>(loadItems());
+const kind = ref<AgendaType>('wedstrijd');
+const title = ref('');
+
+watch(
+  items,
+  (value) => {
+    LocalStorage.set('agenda', value);
+  },
+  {
+    deep: true
+  },
+);
+
+function addItem() {
+  const label = title.value.trim();
+
+  if (label === '') {
+    return;
+  }
+
+  items.value.push({
+    id: crypto.randomUUID(),
+    type: kind.value,
+    title: label,
+  });
+
+  title.value = '';
+}
 </script>
