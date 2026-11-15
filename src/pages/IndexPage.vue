@@ -36,6 +36,9 @@
               <q-item-label>{{ item.title }}</q-item-label>
               <q-item-label caption>
                 {{ item.type === 'wedstrijd' ? 'Wedstrijd' : 'Training' }}
+                <template v-if="item.date">
+                  · {{ formatDate(item.date) }}
+                </template>
               </q-item-label>
             </q-item-section>
 
@@ -70,11 +73,19 @@
           @keyup.enter="addItem"
         />
 
+        <q-input
+          v-model="when"
+          class="q-mt-md"
+          label="Datum"
+          type="date"
+          outlined
+        />
+
         <q-btn
           class="q-mt-md"
           color="primary"
           label="Toevoegen"
-          :disable="title.trim() === ''"
+          :disable="title.trim() === '' || when === ''"
           @click="addItem"
         />
       </q-card-section>
@@ -92,17 +103,12 @@ type AgendaItem = {
   id: string;
   type: AgendaType;
   title: string;
+  date: string;
 };
 
 const kinds = [
-  {
-    label: 'Wedstrijd',
-    value: 'wedstrijd'
-  },
-  {
-    label: 'Training',
-    value: 'training'
-  },
+  { label: 'Wedstrijd', value: 'wedstrijd' },
+  { label: 'Training', value: 'training' },
 ];
 
 function loadItems(): AgendaItem[] {
@@ -110,24 +116,31 @@ function loadItems(): AgendaItem[] {
   return Array.isArray(stored) ? (stored as AgendaItem[]) : [];
 }
 
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat('nl-BE', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  }).format(new Date(value));
+}
+
 const items = ref<AgendaItem[]>(loadItems());
 const kind = ref<AgendaType>('wedstrijd');
 const title = ref('');
+const when = ref('');
 
 watch(
   items,
   (value) => {
     LocalStorage.set('agenda', value);
   },
-  {
-    deep: true
-  },
+  { deep: true },
 );
 
 function addItem() {
   const label = title.value.trim();
 
-  if (label === '') {
+  if (label === '' || when.value === '') {
     return;
   }
 
@@ -135,9 +148,11 @@ function addItem() {
     id: crypto.randomUUID(),
     type: kind.value,
     title: label,
+    date: when.value,
   });
 
   title.value = '';
+  when.value = '';
 }
 
 function removeItem(id: string) {
